@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import SearchBar from "./common/components/SearchBar/SearchBar";
-import ResultCard from "./common/components/ResultCard/ResultCard";
-import Pagination from "@mui/material/Pagination";
+import { useState, useEffect } from "react";
+import SearchPage from "./pages/Search/SearchPage";
+import ResultPage from "./pages/Result/ResultPage";
+import HomePage from "./pages/Home/HomePage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { search } from "./common/apis/githubAPI";
 
 function App() {
@@ -10,12 +11,22 @@ function App() {
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedResult, setSelectedResult] = useState();
 
   const handlePage = (event, value) => {
     setPage(value);
   };
 
+  const handleClear = () => {
+    setSearchTerm("");
+    setResults([]);
+    setTotalResults(0);
+    setPage(1);
+  };
+
   const handleSearch = () => {
+    setIsLoading(true);
     search(searchTerm, pageCount, page)
       .then((response) => {
         setResults(response.data.items);
@@ -26,6 +37,7 @@ function App() {
         console.log("Github Search API Failed:", error);
       })
       .finally(() => {
+        setIsLoading(false);
         console.log("Github Search API Finished");
       });
   };
@@ -35,32 +47,39 @@ function App() {
   }, [page]);
 
   return (
-    <div
-      className="App"
-      style={{
-        height: "100vh",
-        width: "100%",
-        overflow: "auto",
-      }}
-    >
-      <SearchBar
-        handleSearch={handleSearch}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-
-      {results.map((result) => {
-        return <ResultCard key={result.id} result={result} />;
-      })}
-
-      {results.length > 0 && (
-        <Pagination
-          count={Math.ceil(totalResults / pageCount)}
-          page={page}
-          onChange={handlePage}
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="search"
+          element={
+            <SearchPage
+              pageCount={pageCount}
+              results={results}
+              page={page}
+              totalResults={totalResults}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              handleSearch={handleSearch}
+              handleClear={handleClear}
+              handlePage={handlePage}
+            />
+          }
         />
-      )}
-    </div>
+        <Route path="result" element={<ResultPage result={selectedResult} />} />
+        <Route
+          path="/"
+          element={
+            <HomePage
+              handleSearch={handleSearch}
+              handleClear={handleClear}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              page={page}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
