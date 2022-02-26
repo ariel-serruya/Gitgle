@@ -2,15 +2,18 @@
  * Created Date: Friday February 25th 2022                                    *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Friday, 25th February 2022 2:12:28 pm                       * 
+ * Last Modified: Saturday, 26th February 2022 5:57:34 pm                     * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/Home/HomePage.js                                          *
  ******************************************************************************/
 
-import SearchBar from "../../pages/Search/components/SearchBar";
+import SearchBar from "../../common/components/search/SearchBar";
 import { Typography } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { useStyles } from "./HomepageStyles";
 
+//Simple title and seach bar
 function HomePage({
   handleSearch,
   handleClear,
@@ -18,21 +21,11 @@ function HomePage({
   setSearchTerm,
   page,
 }) {
+  const classes = useStyles();
+
   return (
-    <div
-      className="App"
-      style={{
-        height: "100vh",
-        width: "90%",
-        overflow: "auto",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        margin: "auto",
-      }}
-    >
-      <Typography variant="h5" style={{ marginBottom: "3%" }}>
+    <div className="App" className={classes.root}>
+      <Typography variant="h5" className={classes.title}>
         {" "}
         Github Repository Search
       </Typography>
@@ -46,5 +39,13 @@ function HomePage({
     </div>
   );
 }
+
+HomePage.propTypes = {
+  handleSearch: PropTypes.func.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  setSearchTerm: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+};
 
 export default HomePage;

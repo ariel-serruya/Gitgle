@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Friday, 25th February 2022 2:08:59 pm                       * 
+ * Last Modified: Saturday, 26th February 2022 2:29:34 pm                     * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/common/components/SearchBar/SearchBar.js                        *
@@ -13,7 +13,8 @@ import { styled } from "@material-ui/core/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
@@ -26,13 +27,9 @@ const StyledTextField = styled(TextField)(() => ({
   },
 }));
 
-function SearchBar({
-  handleSearch,
-  handleClear,
-  searchTerm,
-  setSearchTerm,
-  page,
-}) {
+//Custmozied search bar used throughout application
+function SearchBar({ handleSearch, handleClear, searchTerm, setSearchTerm }) {
+  //React-router-dom function to navigate to specific route (once enter key is pressed)
   let navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -42,7 +39,6 @@ function SearchBar({
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       navigate(`/search`);
-      //navigate(`/search/:${searchTerm}/$:{page}`);
       handleSearch();
     }
   };
@@ -89,5 +85,12 @@ function SearchBar({
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  handleSearch: PropTypes.func.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  setSearchTerm: PropTypes.func.isRequired,
+};
 
 export default SearchBar;

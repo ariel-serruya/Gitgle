@@ -2,18 +2,24 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Friday, 25th February 2022 3:09:39 pm                       * 
+ * Last Modified: Saturday, 26th February 2022 6:01:31 pm                     * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/SearchPage.js                                              *
  ******************************************************************************/
 
 import { useEffect, useState } from "react";
-import SearchBar from "./components/SearchBar";
+import SearchBar from "../../common/components/search/SearchBar";
 import ResultCard from "../Result/components/ResultCard";
 import Pagination from "@mui/material/Pagination";
 import { Typography } from "@material-ui/core";
 import SortMenu from "./components/SortMenu";
+import { getRateLimit } from "../../common/apis/githubAPI";
+import Skeleton from "@mui/material/Skeleton";
+import PropTypes from "prop-types";
+import { useStyles } from "./SearchPageStyle";
+import { useSnackbar } from "notistack";
+import Header from "../../common/components/header/Header";
 
 function SearchPage({
   pageCount,
@@ -25,55 +31,27 @@ function SearchPage({
   handleSearch,
   handleClear,
   handlePage,
+  setSortType,
+  setOrderType,
+  sortType,
+  isLoading,
+  rateLimit,
 }) {
+  const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+
   return (
-    <div
-      className="App"
-      style={{
-        height: "100vh",
-        width: "100%",
-        overflow: "auto",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{
-          width: "90%",
-          height: "10%",
-          margin: "auto",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          flexDirection: "row",
-          paddingTop: "5%",
-        }}
-      >
-        <Typography variant="h5"> Github Repository Search</Typography>
-        <div style={{ width: "75%" }}>
-          <SearchBar
-            handleSearch={handleSearch}
-            handleClear={handleClear}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            page={page}
-          />
-        </div>
-      </div>
-      <div style={{ height: "90vh" }}>
-        <div
-          style={{
-            height: "10%",
-            width: "90%",
-            margin: "auto",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+    <div className={classes.root}>
+      <Header
+        handleSearch={handleSearch}
+        handleClear={handleClear}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        page={page}
+        rateLimit={rateLimit}
+      />
+      <div style={{ height: "90vh", width: "100%" }}>
+        <div className={classes.subHeader}>
           <Typography>
             {" "}
             We found{" "}
@@ -83,21 +61,25 @@ function SearchPage({
             </span>{" "}
             results!{" "}
           </Typography>
-          <SortMenu />
+          <SortMenu
+            sortType={sortType}
+            setSortType={setSortType}
+            setOrderType={setOrderType}
+          />
         </div>
+        {isLoading ||
+          (!results.length && (
+            <div className={classes.placeholders}>
+              <Skeleton variant="rectangular" width={"80%"} height={118} />
+              <Skeleton variant="rectangular" width={"80%"} height={118} />
+              <Skeleton variant="rectangular" width={"80%"} height={118} />
+              <Skeleton variant="rectangular" width={"80%"} height={118} />
+            </div>
+          ))}
         {results.map((result) => {
           return <ResultCard key={result.id} result={result} />;
         })}
-        <div
-          style={{
-            width: "30%",
-            height: "10%",
-            margin: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div className={classes.pagination}>
           <Pagination
             count={Math.ceil(totalResults / pageCount)}
             page={page}
@@ -105,9 +87,25 @@ function SearchPage({
           />
         </div>
       </div>
-      )
     </div>
   );
 }
+
+//Good runtime typechecking tool:
+SearchPage.propTypes = {
+  pageCount: PropTypes.number.isRequired,
+  results: PropTypes.array.isRequired,
+  page: PropTypes.number.isRequired,
+  totalResults: PropTypes.number.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  setSearchTerm: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  handlePage: PropTypes.func.isRequired,
+  setSortType: PropTypes.func.isRequired,
+  setOrderType: PropTypes.func.isRequired,
+  sortType: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};
 
 export default SearchPage;

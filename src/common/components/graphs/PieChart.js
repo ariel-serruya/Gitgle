@@ -2,23 +2,25 @@
  * Created Date: Friday February 25th 2022                                    *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Friday, 25th February 2022 1:38:27 am                       * 
+ * Last Modified: Saturday, 26th February 2022 5:48:08 pm                     * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/common/components/graphs/PieChart.js                            *
  ******************************************************************************/
 
+//This is a great library for highly customizable React chart components.
+//I use it frequently. See more here: https://nivo.rocks/pie/
 import { ResponsivePie } from "@nivo/pie";
 
-export const PieChart = ({ data /* see data tab */ }) => (
+export const PieChart = ({ data }) => (
   <ResponsivePie
     data={data}
-    margin={{ top: 5, right: 0, bottom: 5, left: 0 }}
+    margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
     innerRadius={0.35}
     padAngle={3}
     cornerRadius={2}
     activeOuterRadiusOffset={8}
-    colors={{ scheme: "green_blue" }}
+    colors={{ scheme: "nivo" }}
     borderWidth={1}
     borderColor={{
       from: "color",

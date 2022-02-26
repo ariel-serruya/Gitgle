@@ -1,18 +1,37 @@
+/******************************************************************************
+ * Created Date: Thursday February 24th 2022                                  *
+ * Author: Ariel S.                                                           *
+ * -----                                                                      *
+ * Last Modified: Saturday, 26th February 2022 6:20:08 pm                     * 
+ * Modified By: Ariel S.                                                      * 
+ * -----                                                                      *
+ * File: /src/App.js                                                          *
+ ******************************************************************************/
+
+//TODO: filte rby language, tests
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchPage from "./pages/Search/SearchPage";
 import ResultPage from "./pages/Result/ResultPage";
 import HomePage from "./pages/Home/HomePage";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { search } from "./common/apis/githubAPI";
+import { search, getRateLimit } from "./common/apis/githubAPI";
+import { useSnackbar } from "notistack";
 
+//App routes to three separate pages and passes them their corresponding props.
+//Pages: Home, Search (several results), and Result (single result)
 function App() {
-  const pageCount = 30;
-  const [results, setResults] = useState([]);
-  const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedResult, setSelectedResult] = useState();
+  const [rateLimit, setRateLimit] = useState();
+  const [results, setResults] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  //API Params:
+  const [sortType, setSortType] = useState("best-match");
+  const [orderType, setOrderType] = useState("desc");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const pageCount = 30;
 
   const handlePage = (event, value) => {
     setPage(value);
@@ -27,14 +46,16 @@ function App() {
 
   const handleSearch = () => {
     setIsLoading(true);
-    search(searchTerm, pageCount, page)
+    search(searchTerm, pageCount, page, sortType, orderType)
       .then((response) => {
         setResults(response.data.items);
         setTotalResults(response.data.total_count);
         console.log("Github Search API Success:", response);
       })
       .catch((error) => {
-        console.log("Github Search API Failed:", error);
+        enqueueSnackbar(error.toString(), {
+          variant: "warning",
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -42,9 +63,30 @@ function App() {
       });
   };
 
+  //Get new results if any of the search parameters change:
   useEffect(() => {
-    handleSearch();
-  }, [page]);
+    if (searchTerm) {
+      handleSearch();
+    }
+  }, [page, sortType, orderType]);
+
+  //Added Github rate limit check so the user knows if they've exceeded their
+  //allotted API calls:
+  useEffect(() => {
+    getRateLimit()
+      .then((response) => {
+        setRateLimit(response.data);
+        console.log("Github Rate Limit API Success:", response);
+      })
+      .catch((error) => {
+        enqueueSnackbar(error.toString(), {
+          variant: "warning",
+        });
+      })
+      .finally(() => {
+        console.log("Github Rate Limit API Finished");
+      });
+  }, [results]);
 
   return (
     <BrowserRouter>
@@ -62,10 +104,27 @@ function App() {
               handleSearch={handleSearch}
               handleClear={handleClear}
               handlePage={handlePage}
+              setSortType={setSortType}
+              setOrderType={setOrderType}
+              sortType={sortType}
+              isLoading={isLoading}
+              rateLimit={rateLimit}
             />
           }
         />
-        <Route path="result" element={<ResultPage result={selectedResult} />} />
+        <Route
+          path="result"
+          element={
+            <ResultPage
+              handleSearch={handleSearch}
+              handleClear={handleClear}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              page={page}
+              rateLimit={rateLimit}
+            />
+          }
+        />
         <Route
           path="/"
           element={

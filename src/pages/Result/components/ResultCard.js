@@ -2,105 +2,67 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Friday, 25th February 2022 3:29:16 pm                       * 
+ * Last Modified: Saturday, 26th February 2022 2:44:23 pm                     * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/common/components/ResultCard/ResultCard.js                      *
  ******************************************************************************/
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Typography, Avatar } from "@material-ui/core";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { theme } from "../../../common/utils/theme";
+import PropTypes from "prop-types";
+import { useStyles } from "./ResultCardStyle";
 
+//Styled result card with requested information
 function ResultCard({ result }) {
+  //Hovered state for conditional borders
   const [hovered, setHovered] = useState("");
+  const classes = useStyles();
 
   return (
-    <Link
-      to={`/result`}
-      state={{ selected: result }}
-      style={{ textDecoration: "none", color: "black" }}
-    >
+    <Link to={`/result`} state={{ selected: result }} className={classes.link}>
       <div
+        className={classes.root}
         style={{
-          width: "90%",
-          height: "15%",
-          border: "1px solid grey",
-          borderRadius: 10,
-          margin: "auto",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "2%",
-          border: hovered ? "3px solid #7561CA" : "1px solid grey",
-          boxShadow: "1px 3px 1px lightgrey",
+          border: hovered ? "3px solid #7561CA" : "1px solid lightgrey",
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: "55%",
-            height: "100%",
-            alignItems: "Center",
-            marginLeft: "3%",
-          }}
-        >
+        <div className={classes.avatarDiv}>
           <Avatar src={result.owner?.avatar_url} />
 
           <div style={{ width: "100%", height: "100%" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                width: "80%",
-                height: "50%",
-                justifyContent: "space-around",
-                alignItems: "flex-end",
-              }}
-            >
+            <div className={classes.metadataDiv}>
               <Typography variant="h5" noWrap>
                 {result.name}
               </Typography>
               <Typography variant="body1" noWrap>
                 {result.owner?.login}
               </Typography>
-              <div
-                style={{
-                  backgroundColor: "#F3E8F8",
-                  borderRadius: 5,
-                  width: "25%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <span style={{ color: "#7561CA", margin: "auto" }}>
+              <div className={classes.languageTag}>
+                <span
+                  style={{
+                    color:
+                      theme.languages.find(
+                        (lang) => lang.name === result.language
+                      )?.color ?? "#7561CA",
+                    margin: "auto",
+                  }}
+                >
                   {result.language}
                 </span>
               </div>
             </div>
 
-            <Typography
-              variant="subtitle2"
-              style={{ height: "50%", overflow: "auto", marginLeft: "5%" }}
-            >
+            <Typography variant="subtitle2" className={classes.description}>
               {result.description}
             </Typography>
           </div>
         </div>
-        <div
-          style={{
-            width: "35%",
-            marginRight: "3%",
-            display: "flex",
-            alignItems: "flex-end",
-            flexDirection: "Column",
-          }}
-        >
+        <div className={classes.secondaryMetadata}>
           <Typography variant="subtitle2">
             {result.stargazers_count} stars
           </Typography>
@@ -112,5 +74,9 @@ function ResultCard({ result }) {
     </Link>
   );
 }
+
+ResultCard.propTypes = {
+  result: PropTypes.object.isRequired,
+};
 
 export default ResultCard;
