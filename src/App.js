@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Saturday, 26th February 2022 6:20:08 pm                     * 
+ * Last Modified: Sunday, 27th February 2022 1:17:29 pm                       * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/App.js                                                          *
@@ -27,6 +27,7 @@ function App() {
   const { enqueueSnackbar } = useSnackbar();
 
   //API Params:
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [sortType, setSortType] = useState("best-match");
   const [orderType, setOrderType] = useState("desc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,7 +47,7 @@ function App() {
 
   const handleSearch = () => {
     setIsLoading(true);
-    search(searchTerm, pageCount, page, sortType, orderType)
+    search(searchTerm, pageCount, page, sortType, orderType, selectedLanguages)
       .then((response) => {
         setResults(response.data.items);
         setTotalResults(response.data.total_count);
@@ -68,7 +69,7 @@ function App() {
     if (searchTerm) {
       handleSearch();
     }
-  }, [page, sortType, orderType]);
+  }, [page, sortType, orderType, selectedLanguages]);
 
   //Added Github rate limit check so the user knows if they've exceeded their
   //allotted API calls:
@@ -109,6 +110,8 @@ function App() {
               sortType={sortType}
               isLoading={isLoading}
               rateLimit={rateLimit}
+              selectedLanguages={selectedLanguages}
+              setSelectedLanguages={setSelectedLanguages}
             />
           }
         />
@@ -122,6 +125,8 @@ function App() {
               setSearchTerm={setSearchTerm}
               page={page}
               rateLimit={rateLimit}
+              selectedLanguages={selectedLanguages}
+              setSelectedLanguages={setSelectedLanguages}
             />
           }
         />

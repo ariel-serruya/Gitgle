@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Saturday, 26th February 2022 6:15:19 pm                     * 
+ * Last Modified: Sunday, 27th February 2022 12:56:22 pm                      * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/ResultPage.js                                             *
@@ -25,6 +25,8 @@ function ResultPage({
   setSearchTerm,
   page,
   rateLimit,
+  selectedLanguages,
+  setSelectedLanguages,
 }) {
   let location = useLocation();
   const { selected } = location.state;
@@ -76,8 +78,10 @@ function ResultPage({
         setSearchTerm={setSearchTerm}
         page={page}
         rateLimit={rateLimit}
+        selectedLanguages={selectedLanguages}
+        setSelectedLanguages={setSelectedLanguages}
       />
-      <div style={{ height: "90vh", width: "90%", margin: "auto" }}>
+      <div style={{ height: "80vh", width: "90%", margin: "auto" }}>
         <div className={classes.header}>
           <Typography variant="h5">
             {" "}
@@ -95,7 +99,14 @@ function ResultPage({
         <div className={classes.chartDiv}>
           <div className={classes.chart}>
             <Typography> Watchers/Stars/Forks </Typography>
-            <WaffleChart data={watcherData} />
+            <WaffleChart
+              data={watcherData}
+              total={
+                selected.watchers_count +
+                selected.forks_count +
+                selected.stargazers_count
+              }
+            />
           </div>
           <div className={classes.chart}>
             <Typography> Languages </Typography>

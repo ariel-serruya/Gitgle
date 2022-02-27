@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Saturday, 26th February 2022 3:20:02 pm                     * 
+ * Last Modified: Sunday, 27th February 2022 1:17:29 pm                       * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/common/apis/githubAPI.js                                        *
@@ -25,11 +25,18 @@ export const search = (
   pageCount = 30,
   pageNumber = 1,
   sortType,
-  orderType = "desc"
+  orderType = "desc",
+  languages
 ) => {
+  //construct query based on selected languages
+  const query =
+    searchKey +
+    "+" +
+    languages.map((language) => `language:${language} `).join("");
+
   return instance.get("/search/repositories", {
     params: {
-      q: searchKey,
+      q: query,
       sort: sortType,
       order: orderType,
       per_page: pageCount,

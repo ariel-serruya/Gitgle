@@ -2,7 +2,7 @@
  * Created Date: Saturday February 26th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Saturday, 26th February 2022 2:48:52 pm                     * 
+ * Last Modified: Sunday, 27th February 2022 11:50:47 am                      * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/Search/SearchPageStyle.js                                 *
@@ -15,7 +15,7 @@ export const useStyles = makeStyles({
     width: "100%",
     overflow: "auto",
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "column",
   },

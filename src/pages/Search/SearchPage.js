@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Saturday, 26th February 2022 6:01:31 pm                     * 
+ * Last Modified: Sunday, 27th February 2022 12:56:22 pm                      * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/SearchPage.js                                              *
@@ -36,6 +36,8 @@ function SearchPage({
   sortType,
   isLoading,
   rateLimit,
+  selectedLanguages,
+  setSelectedLanguages,
 }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -49,8 +51,10 @@ function SearchPage({
         setSearchTerm={setSearchTerm}
         page={page}
         rateLimit={rateLimit}
+        selectedLanguages={selectedLanguages}
+        setSelectedLanguages={setSelectedLanguages}
       />
-      <div style={{ height: "90vh", width: "100%" }}>
+      <div style={{ height: "80vh", width: "100%" }}>
         <div className={classes.subHeader}>
           <Typography>
             {" "}

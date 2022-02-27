@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Saturday, 26th February 2022 2:29:34 pm                     * 
+ * Last Modified: Sunday, 27th February 2022 1:41:54 pm                       * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/common/components/SearchBar/SearchBar.js                        *
@@ -23,7 +23,7 @@ const StyledTextField = styled(TextField)(() => ({
     textIndent: 30,
   },
   "& fieldset": {
-    borderRadius: "30px",
+    borderRadius: "10px",
   },
 }));
 
@@ -50,7 +50,7 @@ function SearchBar({ handleSearch, handleClear, searchTerm, setSearchTerm }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "100%",
+        width: "80%",
       }}
     >
       <SearchIcon
