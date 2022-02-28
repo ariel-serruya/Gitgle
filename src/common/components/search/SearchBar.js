@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Sunday, 27th February 2022 1:41:54 pm                       * 
+ * Last Modified: Sunday, 27th February 2022 4:57:27 pm                       * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/common/components/SearchBar/SearchBar.js                        *
@@ -64,6 +64,7 @@ function SearchBar({ handleSearch, handleClear, searchTerm, setSearchTerm }) {
 
       <StyledTextField
         id="styledtextfield"
+        data-testid="search-bar"
         variant="outlined"
         autoFocus
         value={searchTerm}
@@ -71,6 +72,7 @@ function SearchBar({ handleSearch, handleClear, searchTerm, setSearchTerm }) {
         onKeyDown={handleKeyDown}
       />
       <IconButton
+        data-testid="clear-button"
         onClick={handleClear}
         size="large"
         style={{
