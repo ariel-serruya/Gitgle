@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Tuesday, 1st March 2022 6:26:47 pm                          * 
+ * Last Modified: Tuesday, 1st March 2022 6:57:00 pm                          * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/ResultPage.js                                             *
@@ -31,7 +31,11 @@ function ResultPage({
   let location = useLocation();
   const { selected } = location.state;
   const [languageData, setLanguageData] = useState([]);
-  const [watcherData, setWatcherData] = useState([]);
+  const [watcherData, setWatcherData] = useState([
+    { id: "watchers", label: "watchers", value: selected.watchers_count },
+    { id: "forks", label: "forks", value: selected.forks_count },
+    { id: "stars", label: "stars", value: selected.stargazers_count },
+  ]);
   const classes = useStyles();
 
   //This gets language data from github. Could be moved to githubAPI.js
@@ -56,18 +60,9 @@ function ResultPage({
       });
   };
 
-  const getWatcherData = () => {
-    setWatcherData([
-      { id: "watchers", label: "watchers", value: selected.watchers_count },
-      { id: "forks", label: "forks", value: selected.forks_count },
-      { id: "stars", label: "stars", value: selected.stargazers_count },
-    ]);
-  };
-
   useEffect(() => {
     getLanguageData(selected.languages_url);
-    getWatcherData();
-  }, [selected]);
+  }, []);
 
   return (
     <div className={classes.root}>
