@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Sunday, 27th February 2022 4:14:55 pm                       * 
+ * Last Modified: Tuesday, 1st March 2022 6:45:56 pm                          * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/App.js                                                          *
@@ -46,29 +46,37 @@ function App() {
   };
 
   const handleSearch = () => {
-    setIsLoading(true);
-    search(searchTerm, pageCount, page, sortType, orderType, selectedLanguages)
-      .then((response) => {
-        setResults(response.data.items);
-        setTotalResults(response.data.total_count);
-        console.log("Github Search API Success:", response);
-      })
-      .catch((error) => {
-        enqueueSnackbar(error.toString(), {
-          variant: "warning",
+    //Checks that searchTerm is not an empty string
+    if (searchTerm && searchTerm.trim().length !== 0) {
+      setIsLoading(true);
+      search(
+        searchTerm,
+        pageCount,
+        page,
+        sortType,
+        orderType,
+        selectedLanguages
+      )
+        .then((response) => {
+          setResults(response.data.items);
+          setTotalResults(response.data.total_count);
+          console.log("Github Search API Success:", response);
+        })
+        .catch((error) => {
+          enqueueSnackbar(error.toString(), {
+            variant: "warning",
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+          console.log("Github Search API Finished");
         });
-      })
-      .finally(() => {
-        setIsLoading(false);
-        console.log("Github Search API Finished");
-      });
+    }
   };
 
   //Get new results if any of the search parameters change:
   useEffect(() => {
-    if (searchTerm) {
-      handleSearch();
-    }
+    handleSearch();
   }, [page, sortType, orderType, selectedLanguages]);
 
   //Added Github rate limit check so the user knows if they've exceeded their

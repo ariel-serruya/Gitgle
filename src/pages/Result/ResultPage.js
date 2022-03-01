@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Sunday, 27th February 2022 12:56:22 pm                      * 
+ * Last Modified: Tuesday, 1st March 2022 6:26:47 pm                          * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/ResultPage.js                                             *

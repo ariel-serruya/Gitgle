@@ -2,7 +2,7 @@
  * Created Date: Thursday February 24th 2022                                  *
  * Author: Ariel S.                                                           *
  * -----                                                                      *
- * Last Modified: Sunday, 27th February 2022 12:56:22 pm                      * 
+ * Last Modified: Tuesday, 1st March 2022 6:44:24 pm                          * 
  * Modified By: Ariel S.                                                      * 
  * -----                                                                      *
  * File: /src/pages/SearchPage.js                                              *
@@ -71,15 +71,14 @@ function SearchPage({
             setOrderType={setOrderType}
           />
         </div>
-        {isLoading ||
-          (!results.length && (
-            <div className={classes.placeholders}>
-              <Skeleton variant="rectangular" width={"80%"} height={118} />
-              <Skeleton variant="rectangular" width={"80%"} height={118} />
-              <Skeleton variant="rectangular" width={"80%"} height={118} />
-              <Skeleton variant="rectangular" width={"80%"} height={118} />
-            </div>
-          ))}
+        {isLoading && (
+          <div className={classes.placeholders}>
+            <Skeleton variant="rectangular" width={"80%"} height={118} />
+            <Skeleton variant="rectangular" width={"80%"} height={118} />
+            <Skeleton variant="rectangular" width={"80%"} height={118} />
+            <Skeleton variant="rectangular" width={"80%"} height={118} />
+          </div>
+        )}
         {results.map((result) => {
           return <ResultCard key={result.id} result={result} />;
         })}
